@@ -1,0 +1,29 @@
+.label { 
+    position: relative;
+    font-size: 1.5vw;
+    line-height: 1.8vw;
+    font-weight: 500;
+    color: #A2ABBF;
+    cursor: pointer;
+}
+
+.checkbox {
+    margin-right: 2vw;
+    visibility: hidden;
+}
+
+.label::before {
+    content: "";
+    position: absolute;
+    width: 1.6vw;
+    height: 1.6vw;
+    margin: 0;
+    left: -3.5vw;
+    top: 0.05vw;
+    border-radius: 0.2vw;
+    background: #F2F3F3;
+}
+
+.checkbox:checked + .label::before {
+    background: #a7f6bb;
+}

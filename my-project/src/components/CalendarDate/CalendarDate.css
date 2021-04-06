@@ -1,0 +1,42 @@
+.date {
+    margin: 0;
+    padding: 0;
+    text-transform: none;
+    text-indent: 0;
+    text-shadow: none;
+    text-align: center;
+    align-items: center;
+    box-sizing: border-box;
+    border: none;
+    font-size: 1.4vw;
+    background-color: transparent;
+    color: #7C86A2;
+    cursor: pointer;
+}
+
+.date:active,
+.date:focus,
+.date:hover {
+    outline: none
+}
+
+.withTasks {
+    color: #AA3434
+}
+
+.active {
+    position: relative;
+    color: #ffffff;
+}
+
+.active::before {
+    content: '';
+    position: absolute;
+    width: 3.2vw;
+    height: 3.2vw;
+    top: -0.9vw;
+    left: -0.2vw;
+    background: #7ED5FC;
+    border-radius: 2vw;
+    z-index: -1;
+}

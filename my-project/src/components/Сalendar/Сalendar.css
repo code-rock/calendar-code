@@ -1,0 +1,17 @@
+.calendar {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    column-gap: 3vw;
+    row-gap: 1.6vw;
+    margin-bottom: 2vw;
+    text-align: center;
+}
+
+.day {
+    padding: 1vw 0;
+    font-size: 1.5vw;
+    line-height: 1.9vw; 
+    font-weight: 500;
+    color: rgba(52, 72, 94, 0.536062);
+}
+

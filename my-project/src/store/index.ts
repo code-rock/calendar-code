@@ -3,7 +3,8 @@ import Vuex from 'vuex'
 import { 
   SET_TASK, 
   SET_NEW_TASK_TEXT,
-  SET_SELECTED_DATE
+  SET_SELECTED_DATE,
+  CHANGE_TASK_EXECUTION_STATUS
 } from './mutation-types';
 
 Vue.use(Vuex)
@@ -14,7 +15,10 @@ interface StateType {
   selectedDate: string;
   newTaskText: string;  
   tasks: {
-    [key: string]: Array<string>;
+    [key: string]: Array<{
+      task: string,
+      isDone: boolean
+    }>;
   }
 }
 
@@ -25,8 +29,14 @@ export default new Vuex.Store({
     selectedDate: new Date().toLocaleDateString(),
     newTaskText: '',    
     tasks: {
-      '20.04.2021': ['Задача 1'],
-      '25.04.2021': ['Задача 1']
+      '20.04.2021': [{
+        task: 'Выполнить задание',
+        isDone: false
+      }],
+      '25.04.2021': [{
+        task: 'Напечь печенек',
+        isDone: false
+      }]
     }
   },
   mutations: { 
@@ -34,7 +44,9 @@ export default new Vuex.Store({
       const old = state.tasks[state.selectedDate];
       state.tasks = {
         ...state.tasks,
-        [state.selectedDate]:  old ? [...old, state.newTaskText] : [state.newTaskText] 
+        [state.selectedDate]:  old 
+          ? [...old, { task: state.newTaskText, isDone: false }] 
+          : [{ task: state.newTaskText, isDone: false }] 
       };
       state.newTaskText = '';
     },
@@ -44,6 +56,10 @@ export default new Vuex.Store({
     [SET_SELECTED_DATE] (state, date) {
       state.selectedDate = new Date(state.year, state.month -1, date).toLocaleDateString();
     },
+    [CHANGE_TASK_EXECUTION_STATUS](state, payload) {
+      state.tasks[state.selectedDate][payload.id].isDone = payload.isDone;
+      state.tasks = {...state.tasks};
+    }
   },
   getters: {
     countDaysInMonth: state => {

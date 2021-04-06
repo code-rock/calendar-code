@@ -6,7 +6,7 @@ import SectionTitle from '../SectionTitle/SectionTitle';
 import Task from '../Task/Task';
 import TextField from '../TextField/TextField';
 import styles from './ToDoList.css?module';
-import { SET_TASK, SET_NEW_TASK_TEXT } from '../../store/mutation-types';
+import { SET_TASK, SET_NEW_TASK_TEXT, CHANGE_TASK_EXECUTION_STATUS } from '../../store/mutation-types';
 import { days, months } from './constants';
 
 @Component
@@ -24,8 +24,16 @@ export default class ToDoList extends VueComponent {
     }
 
     handleSubmit = (e: Event) => {
-        e.preventDefault();
+        e.preventDefault();        
         this.$store.commit(SET_TASK);
+    }
+    
+    handleChangeStatus = ({ target }: Event, id: number) => {
+        const targetInputElement: HTMLInputElement = target as HTMLInputElement;
+        this.$store.commit(CHANGE_TASK_EXECUTION_STATUS, {
+            id: id,
+            isDone: targetInputElement.checked
+        });
     }
 
     handleChangeTask({ target }: Event) {
@@ -34,27 +42,34 @@ export default class ToDoList extends VueComponent {
     }
 
    render() {
+    const { countDaysInMonth, countMonthFromStart, getSelectedDay, getDatesWithTasks, getCurrTasks } = this.$store.getters;
+    const { month, year, newTaskText } = this.$store.state;
     return  <div class={styles.todo}>
                 <Section>
                     <SectionTitle>
-                        {months[this.$store.state.month - 1]} {this.$store.state.year}
+                        {months[month - 1]} {year}
                     </SectionTitle>
-                    <Calendar daysInMonth={this.$store.getters.countDaysInMonth} 
-                              days={days} 
-                              startFrom={this.$store.getters.countMonthFromStart}
-                              selectedDay={this.$store.getters.getSelectedDay}
-                              specialDates={this.$store.getters.getDatesWithTasks}/>
+                    <Calendar daysInMonth={countDaysInMonth}                               
+                              startFrom={countMonthFromStart}
+                              selectedDay={getSelectedDay}
+                              specialDates={getDatesWithTasks}
+                              days={days} />
                 </Section>
                 <Section>
                     <SectionTitle>События</SectionTitle>
                     <div class={styles.taskList}>
-                        {this.$store.getters.getCurrTasks.map((task: string) => {
-                            return <Task text={task} />
+                        {getCurrTasks.map((item: { task: string, isDone: boolean}, id: number) => {
+                           console.log(item,'vdsv', typeof id)
+                           return <Task id={id}
+                                        key={`${id}`} 
+                                        text={item.task} 
+                                        isActive={item.isDone}
+                                        handleChange={this.handleChangeStatus} />
                         })}
                         <form ref='form'>
                             <TextField handleInput={this.handleChangeTask} 
-                                   value={this.$store.state.newTaskText}
-                                   placeholder='Текст' />
+                                       value={newTaskText}
+                                       placeholder='Текст' />
                         </form>
                     </div>
                 </Section>

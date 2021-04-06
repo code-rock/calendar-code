@@ -13,9 +13,5 @@
 .taskList > * {
     margin-top: 0;
     margin-bottom: 1.4vw;
-}
-
-.taskList > *:last-child {
-    display: inline-block;
     margin-left: 3.5vw;
 }

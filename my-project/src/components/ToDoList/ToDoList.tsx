@@ -11,10 +11,21 @@ import { days, months } from './constants';
 
 @Component
 export default class ToDoList extends VueComponent {
-    handleEnter = ({ code }: KeyboardEvent) => {
-        if (code == "Enter") {
-            this.$store.commit(SET_TASK);
-        } 
+    $refs!: {
+        form: HTMLFormElement
+    } 
+
+    mounted() {
+        this.handleSubmit && this.$refs.form.addEventListener('submit', this.handleSubmit);
+    }
+    
+    unmounted() {
+        this.handleSubmit && this.$refs.form.removeEventListener('submit', this.handleSubmit);
+    }
+
+    handleSubmit = (e: Event) => {
+        e.preventDefault();
+        this.$store.commit(SET_TASK);
     }
 
     handleChangeTask({ target }: Event) {
@@ -40,10 +51,11 @@ export default class ToDoList extends VueComponent {
                         {this.$store.getters.getCurrTasks.map((task: string) => {
                             return <Task text={task} />
                         })}
-                        <TextField handleInput={this.handleChangeTask} 
-                                   handleKeyUp={this.handleEnter} 
+                        <form ref='form'>
+                            <TextField handleInput={this.handleChangeTask} 
                                    value={this.$store.state.newTaskText}
                                    placeholder='Текст' />
+                        </form>
                     </div>
                 </Section>
             </div>

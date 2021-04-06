@@ -59,7 +59,6 @@ export default class ToDoList extends VueComponent {
                     <SectionTitle>События</SectionTitle>
                     <div class={styles.taskList}>
                         {getCurrTasks.map((item: { task: string, isDone: boolean}, id: number) => {
-                           console.log(item,'vdsv', typeof id)
                            return <Task id={id}
                                         key={`${id}`} 
                                         text={item.task} 
